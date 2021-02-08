@@ -1,1 +1,1 @@
-# slimsage
+# thinsage
