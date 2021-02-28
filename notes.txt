@@ -1,0 +1,12 @@
+random:
+  given
+    collection/list/array-like of OBJECTS
+    percentage/fraction/size
+
+stratified (w known class assignments)
+	balanced and imbalanced
+  collection of OBJECTS
+  list tells class/category assigned to each object
+
+
+explore sample from time series
