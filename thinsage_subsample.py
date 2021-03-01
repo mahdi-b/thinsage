@@ -104,9 +104,9 @@ def stratified_subsample_balanced(data, class_list, size):
     for i in range(len(final_perm)):
         combined_final.append(combined_list[final_perm[i]])
         class_final.append(sub_class_list[final_perm[i]])
-    return combined_list, sub_class_list
+    return combined_final, class_final
 
-def stratified_subsample_imbalanced(data, class_list, size):
+# def stratified_subsample_imbalanced(data, class_list, size):
     # num_classes = np.unique(class_list)
     #
     # if isinstance(data, list):
