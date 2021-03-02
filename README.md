@@ -13,6 +13,24 @@ lots of decorators
 sklearn model Selection
   train_test_split
   split is analogous to subsampling?
+  
+random:
+  given
+    collection/list/array-like of OBJECTS
+    percentage/fraction/size
+
+stratified (w known class assignments)
+	balanced and imbalanced
+  collection of OBJECTS
+  list tells class/category assigned to each object
+
+
+explore sample from time series
+  LTTB: Largest Triangle Three Bucket
+  "english" explanation: https://medium.com/@hayley.morrison/sampling-time-series-data-sets-fc16caefff1b
+  python code: https://github.com/devoxi/lttb-py/blob/master/lttb/lttb.py
+  takes in data: list of tuples (x, y) representing points in the time series
+           threshold: desired size (int) of subsample to be returned
 
 # We need to list example algorithms and
 
