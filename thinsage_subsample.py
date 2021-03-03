@@ -135,7 +135,18 @@ def stratified_subsample_balanced(data, class_list, size):
 
 
 def stratified_subsample_imbalanced(data, class_list, size):
-
+    """
+       data will be list/collection of type Object where each item belongs to a class as specified by class_list,
+       data[i] will belong to class class_list[i].
+       np.unique(class_list) should indicate number of different classes.
+       :param data: list/collection of type Object. Contains the samples to be sub-sampled from.
+       :param class_list: list of class identifiers, classList[i] = x implies data[i] belongs to class x
+                          where x can be of type int, string, or object
+       :param size: Integer to determine how many samples desired, or float between 0 and 1 to represent
+                    percentage of samples to be taken.
+       :return: randomized list containing "imbalanced" (keep original proportions) number samples from each
+                class in the given data set matching class_list to indicate classes of the sub-samples.
+    """
     num_classes = len(np.unique(class_list))
 
     # check validity of data and get data size
