@@ -33,7 +33,7 @@
       <recent name="C:\Users\iskam\OneDrive\Documents\GitHub\thinsage" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_subsample.test_stratified_balanced_subsample_obj">
+  <component name="RunManager" selected="Python tests.pytest for test_subsample.test_stratified_subsample_balanced_obj">
     <configuration name="pytest for test_subsample.test_random_subsample" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="thinsage" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -47,22 +47,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_subsample.test_random_subsample&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_subsample.test_random_subsample_obj" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="thinsage" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_subsample.test_random_subsample_obj&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -98,7 +82,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_subsample.test_stratified_balanced_subsamplep" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_subsample.test_stratified_subsample_balanced_obj" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="thinsage" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -110,17 +94,33 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_subsample.test_stratified_balanced_subsamplep&quot;" />
+      <option name="_new_target" value="&quot;test_subsample.test_stratified_subsample_balanced_obj&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_subsample.test_stratified_subsample_imbalanced_obj" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="thinsage" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_subsample.test_stratified_subsample_imbalanced_obj&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_subsample.test_stratified_subsample_balanced_obj" />
+        <item itemvalue="Python tests.pytest for test_subsample.test_stratified_subsample_imbalanced_obj" />
         <item itemvalue="Python tests.pytest for test_subsample.test_stratified_balanced_subsample_obj" />
         <item itemvalue="Python tests.pytest for test_subsample.test_stratified_balanced_subsample" />
         <item itemvalue="Python tests.pytest for test_subsample.test_random_subsample" />
-        <item itemvalue="Python tests.pytest for test_subsample.test_random_subsample_obj" />
-        <item itemvalue="Python tests.pytest for test_subsample.test_stratified_balanced_subsamplep" />
       </list>
     </recent_temporary>
   </component>
@@ -144,22 +144,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614654223202" />
-    <state width="1899" height="301" key="GridCell.Tab.0.bottom" timestamp="1614722298903">
+    <state width="1899" height="183" key="GridCell.Tab.0.bottom" timestamp="1614768901233">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614722298903" />
-    <state width="1899" height="301" key="GridCell.Tab.0.center" timestamp="1614722298903">
+    <state width="1899" height="183" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614768901233" />
+    <state width="1899" height="128" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1614766568093" />
+    <state width="1899" height="183" key="GridCell.Tab.0.center" timestamp="1614768901233">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614722298903" />
-    <state width="1899" height="301" key="GridCell.Tab.0.left" timestamp="1614722298903">
+    <state width="1899" height="183" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614768901233" />
+    <state width="1899" height="128" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1614766568092" />
+    <state width="1899" height="183" key="GridCell.Tab.0.left" timestamp="1614768901233">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614722298903" />
-    <state width="1899" height="301" key="GridCell.Tab.0.right" timestamp="1614722298903">
+    <state width="1899" height="183" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614768901233" />
+    <state width="1899" height="128" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1614766568092" />
+    <state width="1899" height="183" key="GridCell.Tab.0.right" timestamp="1614768901233">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614722298903" />
+    <state width="1899" height="183" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1614768901233" />
+    <state width="1899" height="128" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1614766568093" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1614462722306">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
