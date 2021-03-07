@@ -39,9 +39,7 @@ def test_random_subsample_obj():
     # initialize data
     data_size = 100
     test_size = 20
-    test_list = []
-    for i in range(data_size):
-        test_list.append(DummyObj())
+    test_list = [DummyObj() for i in range(data_size)]
 
     # subsample data
     test_sub_sample = random_subsample(test_list, test_size)
@@ -126,7 +124,7 @@ def test_stratified_subsample_balanced_obj():
     class_list = []
     for i in range(data_size):
         this_class = np.random.choice(classes)
-        test_list.append(DummyObj(classId=this_class))
+        test_list.append(DummyObj(class_id=this_class))
         class_list.append(this_class)
     # sub sample from data
     test_size = 45
@@ -143,7 +141,7 @@ def test_stratified_subsample_balanced_obj():
         # check all that are returned are from the original set
         assert test_sub_sample[i] in test_list
         # check returned class is same as the original
-        assert test_sub_sample[i].classID == sub_class_list[i]
+        assert test_sub_sample[i].class_id == sub_class_list[i]
         # check no duplicates were returned
         for j in range(i+1, test_size):
             assert test_sub_sample[i].UUID != test_sub_sample[j].UUID
@@ -178,7 +176,7 @@ def test_stratified_subsample_imbalanced_obj():
         proportions[this_class] = 0
     for i in range(data_size):
         this_class = np.random.choice(classes)
-        test_list.append(DummyObj(classId=this_class))
+        test_list.append(DummyObj(class_id=this_class))
         class_list.append(this_class)
         proportions[this_class] += 1
 
@@ -200,7 +198,7 @@ def test_stratified_subsample_imbalanced_obj():
         # check all that are returned are from the original set
         assert test_sub_sample[i] in test_list
         # check returned class is same as the original
-        assert test_sub_sample[i].classID == sub_class_list[i]
+        assert test_sub_sample[i].class_id == sub_class_list[i]
         # check no duplicates were returned
         for j in range(i+1, test_size):
             assert test_sub_sample[i].UUID != test_sub_sample[j].UUID

@@ -1,4 +1,5 @@
 import numpy as np
+import scipy as sp
 import random
 
 
@@ -45,11 +46,8 @@ def random_subsample(data, size=0.25, axis=0):
     # check size parameter
     num_samples = check_size_parameter(size, data_size)
 
-    # subsampling with random
-    ret_list = []
     random_perm = np.random.permutation(data_size)
-    for i in range(num_samples):
-        ret_list.append(data[random_perm[i]])
+    ret_list = [data[random_perm[i]] for i in range(num_samples)]
     return ret_list
 
 
@@ -67,8 +65,8 @@ def stratified_subsample(data, class_list, size, balanced=True):
     :return: randomized list containing balanced number samples from each class in the given data set
              matching class_list to indicate classes of the sub-samples.
     """
-    return stratified_subsample_balanced(data, class_list, size) if balanced else \
-        stratified_subsample_imbalanced(data, class_list, size)
+    return stratified_subsample_balanced(data=data, class_list=class_list, size=size) if balanced else \
+        stratified_subsample_imbalanced(data=data, class_list=class_list, size=size)
 
 
 def stratified_subsample_balanced(data, class_list, size):
@@ -134,7 +132,77 @@ def stratified_subsample_balanced(data, class_list, size):
     return combined_final, class_final
 
 
-def stratified_subsample_imbalanced(data, class_list, size):
+def stratified_subsample_imbalanced(data, class_list, size, exact=True):
+    """
+    TO-DO: add docstring
+    :param data:
+    :param class_list:
+    :param size:
+    :param exact:
+    :return:
+    """
+    return stratified_subsample_imbalanced_exact(data=data, class_list=class_list, size=size) if exact\
+        else stratified_subsample_imbalanced_prob(data, class_list, size)
+
+
+def stratified_subsample_imbalanced_prob(data, class_list, size):
+    num_classes = len(np.unique(class_list))
+
+    # check validity of data and get data size
+    if isinstance(data, list):
+        data_size = len(data)
+    else:
+        data_size = data.shape[0]
+
+    if data_size != len(class_list):
+        raise Exception(f'classes and data should be same size')
+
+    # check size parameter and get number of samples desired
+    num_samples = check_size_parameter(size, data_size)
+    if num_samples == -1:
+        raise Exception(f"Invalid value was given for parameter \'size\'")
+
+    proportions = {}
+    for this_class in np.unique(class_list):
+        proportions[this_class] = 0
+
+    for this_class in class_list:
+        proportions[this_class] += 1
+
+    prop_list = [float(val / data_size) for val in proportions.values()]
+
+    multi = sp.random.multinomial(num_samples, prop_list)
+    for i, key in enumerate(proportions.keys()):
+        proportions[key] = multi[i]
+
+    # make dictionary key is class and value is list of indices in data
+    # where item is of class key
+    class_data = {}
+    for i in range(data_size):
+        if class_list[i] not in class_data.keys():
+            class_data[class_list[i]] = [i]
+        else:
+            class_data[class_list[i]].append(i)
+
+    # take samples equal to proportions from each class and combine into one list
+    # while keeping track of the assigned classes
+    combined_list = []
+    sub_class_list = []
+    for key in class_data.keys():
+        random_perm = np.random.permutation(class_data[key])
+        for i in range(proportions[key]):
+            combined_list.append(data[random_perm[i]])
+            sub_class_list.append(class_list[random_perm[i]])
+
+    # shuffle the combined list so that the returned list is NOT sorted by class
+    final_perm = np.random.permutation(len(combined_list))
+    combined_final = [combined_list[final_perm[i]] for i in range(len(final_perm))]
+    class_final = [sub_class_list[final_perm[i]] for i in range(len(final_perm))]
+
+    return combined_final, class_final
+
+
+def stratified_subsample_imbalanced_exact(data, class_list, size):
     """
        data will be list/collection of type Object where each item belongs to a class as specified by class_list,
        data[i] will belong to class class_list[i].
@@ -156,7 +224,7 @@ def stratified_subsample_imbalanced(data, class_list, size):
         data_size = data.shape[0]
 
     if data_size != len(class_list):
-        raise Exception(f'')
+        raise Exception(f'classes and data should be same size')
 
     # check size parameter and get number of samples desired
     num_samples = check_size_parameter(size, data_size)
@@ -179,7 +247,7 @@ def stratified_subsample_imbalanced(data, class_list, size):
     # (convert float to whole numbers)
     count = 0
     for i, key in enumerate(proportions.keys()):
-        proportions[key] = round(proportions[key] * num_samples)
+        # proportions[key] = round(proportions[key] * num_samples)
         if i == num_classes - 1:
             proportions[key] = num_samples - count
         else:
@@ -208,9 +276,7 @@ def stratified_subsample_imbalanced(data, class_list, size):
 
     # shuffle the combined list so that the returned list is NOT sorted by class
     final_perm = np.random.permutation(len(combined_list))
-    combined_final = []
-    class_final = []
-    for i in range(len(final_perm)):
-        combined_final.append(combined_list[final_perm[i]])
-        class_final.append(sub_class_list[final_perm[i]])
+    combined_final = [combined_list[final_perm[i]] for i in range(len(final_perm))]
+    class_final = [sub_class_list[final_perm[i]] for i in range(len(final_perm))]
+
     return combined_final, class_final
