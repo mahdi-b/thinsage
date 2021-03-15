@@ -1,27 +1,7 @@
 import numpy as np
 import scipy as sp
-import random
-
-
-def check_size_parameter(size, data_size):
-    """
-    helper function to check parameter 'size'. returns num_samples or -1 if invalid
-    :param size: user given input parameter
-    :param data_size: size of the original dataset
-    :return: num_samples: the number of samples to select from the data
-    """
-    num_samples = -1
-    if isinstance(size, float):
-        if size <= 0 or size >= 1:
-            raise Exception(f"Invalid value was given for parameter \'size\'")
-        else:
-            num_samples = np.floor((size * data_size))
-    elif isinstance(size, int):
-        if size >= data_size or size <= 0:
-            raise Exception(f"Invalid value was given for parameter \'size\'")
-        else:
-            num_samples = size
-    return num_samples
+from helper_functions import get_num_samples
+from helper_functions import get_data_size
 
 
 def random_subsample(data, size=0.25, axis=0):
@@ -36,15 +16,10 @@ def random_subsample(data, size=0.25, axis=0):
     """
 
     # check data parameter
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
-    if data_size <= 0:
-        raise Exception(f'An empty collection or list was given for the parameter\'data\'.')
+    data_size = get_data_size(data)
 
     # check size parameter
-    num_samples = check_size_parameter(size, data_size)
+    num_samples = get_num_samples(size, data_size)
 
     random_perm = np.random.permutation(data_size)
     ret_list = [data[random_perm[i]] for i in range(num_samples)]
@@ -85,16 +60,10 @@ def stratified_subsample_balanced(data, class_list, size):
     """
     num_classes = len(np.unique(class_list))
 
-    # validate type of 'data'
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
-    if data_size <= 0:
-        raise Exception(f'An empty collection or list was given for the parameter\'data\'.')
+    data_size = get_data_size(data)
 
     # check size parameter and get number of samples to return
-    num_samples = check_size_parameter(size, data_size)
+    num_samples = get_num_samples(size, data_size)
     if num_samples == -1:
         raise Exception(f"Invalid value was given for parameter \'size\'")
 
@@ -148,17 +117,13 @@ def stratified_subsample_imbalanced(data, class_list, size, exact=True):
 def stratified_subsample_imbalanced_prob(data, class_list, size):
     num_classes = len(np.unique(class_list))
 
-    # check validity of data and get data size
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
+    data_size = get_data_size(data)
 
     if data_size != len(class_list):
         raise Exception(f'classes and data should be same size')
 
     # check size parameter and get number of samples desired
-    num_samples = check_size_parameter(size, data_size)
+    num_samples = get_num_samples(size, data_size)
     if num_samples == -1:
         raise Exception(f"Invalid value was given for parameter \'size\'")
 
@@ -217,17 +182,13 @@ def stratified_subsample_imbalanced_exact(data, class_list, size):
     """
     num_classes = len(np.unique(class_list))
 
-    # check validity of data and get data size
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
+    data_size = get_data_size(data)
 
     if data_size != len(class_list):
         raise Exception(f'classes and data should be same size')
 
     # check size parameter and get number of samples desired
-    num_samples = check_size_parameter(size, data_size)
+    num_samples = get_num_samples(size, data_size)
     if num_samples == -1:
         raise Exception(f"Invalid value was given for parameter \'size\'")
 

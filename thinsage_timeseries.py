@@ -1,31 +1,22 @@
-import numpy as np
 import math
 import random
-
-from thinsage_subsample import check_size_parameter
+from helper_functions import get_num_samples
+from helper_functions import get_data_size
+from helper_functions import avg
 
 """
-:TO-DO: nan values ?
-sampling from time series.
-we'll assume time series is given as list/array where indices are time interval. 
-optional to include matching list of labels for the x axis
+:TO-DO: DocStrings
 """
 
 
 def timeseries_random(data, size, x_labels=None):
     # check data parameter
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
-    if data_size <= 0:
-        raise Exception(f'An empty collection or list was given for the parameter\'data\'.')
+    data_size = get_data_size(data)
 
     # check size and get num samples to return
-    num_samples = check_size_parameter(size=size, data_size=data_size)
+    num_samples = get_num_samples(size=size, data_size=data_size)
 
     # subsampling with random
-
     indices = random.sample(range(data_size), num_samples)
     indices.sort()
     ret_list = [data[indices[i]] for i in range(num_samples)]
@@ -39,27 +30,28 @@ def timeseries_random(data, size, x_labels=None):
 def timeseries_interval(data, k=0, size=0, x_labels=None):
     # takes either k or size
     # check data parameter
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
-    if data_size <= 0:
-        raise Exception(f'An empty collection or list was given for the parameter\'data\'.')
+    data_size = get_data_size(data)
 
     if not isinstance(k, int):
         raise Exception(f'Invalid type \'{type(k)}\' was given, expected \'int\'.')
 
-    # default value
-    if k == 0 and size == 0:
-        size = .25
-    elif k > 0 and size > 0:
-        raise Exception(f'Expected either one or none of the two parameters; \'k\' and \'size\', not both.')
+    if k < 0 or size < 0:
+        raise Exception(f'Invalid parameters were given.')
 
-    if k < 1:
-        num_samples = check_size_parameter(size=size, data_size=data_size)
-        k = int(np.floor(data_size / num_samples))
+    num_samples = 0
+    if k == 0:
+        if size == 0:
+            size = .25
+        num_samples = get_num_samples(size=size, data_size=data_size)
+        k = int(round(data_size / num_samples))
+    else:
+        if size > 0:
+            raise Exception(f'Expected either one or none of the two parameters; \'k\' and \'size\', not both.')
 
     indices = range(0, data_size, k)
+    if num_samples > 0:
+        if len(indices) > num_samples:
+            indices = indices[0:num_samples]
 
     ret_list = [data[indices[i]] for i in range(len(indices))]
     if x_labels is None:
@@ -72,12 +64,7 @@ def timeseries_interval(data, k=0, size=0, x_labels=None):
 
 def timeseries_bucket_random(data, num_buckets, per_bucket=1, x_labels=None):
     # check data parameter
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
-    if data_size <= 0:
-        raise Exception(f'An empty collection or list was given for the parameter\'data\'.')
+    data_size = get_data_size(data)
 
     if num_buckets * per_bucket >= data_size:
         raise Exception(f'\'num_buckets\' parameter must be less than size of \'data\'.')
@@ -107,33 +94,23 @@ def timeseries_bucket_random(data, num_buckets, per_bucket=1, x_labels=None):
     return ret_list, ret_labels
 
 
-def timeseries_sliding_window(data, w_size, lambd='avg', delta=.1, x_labels=None):
+def timeseries_sliding_window(data, w_size, f=avg, delta=.1, x_labels=None):
     # check data parameter
     # delta will be ratio/percentage of abs(max - min)
-    if isinstance(data, list):
-        data_size = len(data)
-    else:
-        data_size = data.shape[0]
-    if data_size <= 0:
-        raise Exception(f'An empty collection or list was given for the parameter\'data\'.')
+    data_size = get_data_size(data)
 
     if delta <= 0 or not isinstance(delta, float) or delta >= 1:
         raise Exception('Invalid value was given for parameter \'delta\'.')
 
-    delta_num = np.abs(max(data) - min(data)) * delta
+    delta_num = abs(max(data) - min(data)) * delta
 
     # include first val?
     indices = [0]
     window = [data[0]]
     for i in range(1, data_size):
-        if lambd == 'avg':
-            val = np.average(window)
-        elif lambd == 'min':
-            val = min(window)
-        elif lambd == 'max':
-            val = max(window)
+        val = f(window)
 
-        if np.abs(val - data[i]) >= delta_num:
+        if abs(val - data[i]) >= delta_num:
             indices.append(i)
 
         if len(window) >= w_size:
