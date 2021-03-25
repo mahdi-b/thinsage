@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2581c60a-b1cc-4944-9ae6-f3c1b69a692d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/thinsage.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/thinsage.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thinsage_multiclass.py" beforeDir="false" afterPath="$PROJECT_DIR$/thinsage_multiclass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thinsage_subsample.py" beforeDir="false" afterPath="$PROJECT_DIR$/thinsage_subsample.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

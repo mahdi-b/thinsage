@@ -19,13 +19,16 @@ def distances_to_probabilities(distances):
 
 
 # pure implementation no regard for distance
-def multiclass_subsample(data, size, k=None):
+def multiclass_subsample(data, size, k=None, inflate_k=0):
     # convert to list
     if isinstance(data, pd.DataFrame):
         data = data.values.tolist()
 
+    if not isinstance(inflate_k, int):
+        raise Exception(f'expected value of type int for inflate_k but got {type(inflate_k)}.')
+
     # get k clusters
-    k = infer_k(data) if k is None else k
+    k = infer_k(data) + inflate_k if k is None else k
 
     # fit the model, get the clusters
     kmeans = KMeans(n_clusters=k, random_state=0).fit(data)
@@ -37,7 +40,7 @@ def multiclass_subsample(data, size, k=None):
 
 
 # take distance into account
-def multiclass_subsample_prob(data, size, k=None):
+def multiclass_subsample_prob(data, size, k=None, inflate_k=0):
     """
     TO-DO: check for duplicates
     :param data:
@@ -49,10 +52,13 @@ def multiclass_subsample_prob(data, size, k=None):
     if isinstance(data, pd.DataFrame):
         data = data.values.tolist()
 
+    if not isinstance(inflate_k, int):
+        raise Exception(f'expected value of type int for inflate_k but got {type(inflate_k)}.')
+
     num_samples = get_num_samples(size=size, data_size=get_data_size(data))
 
     # get k clusters
-    k = infer_k(data) if k is None else k
+    k = infer_k(data) + inflate_k if k is None else k
 
     # fit the model, get the clusters
     kmeans = KMeans(n_clusters=k, random_state=0).fit(data)
