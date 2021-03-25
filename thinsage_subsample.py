@@ -2,6 +2,52 @@ import numpy as np
 import scipy as sp
 from helper_functions import get_num_samples
 from helper_functions import get_data_size
+from helper_functions import normalize
+
+
+def get_final_balanced_list(data, class_data, class_list, num_samples, num_classes):
+    # take equal proportions from each class and combine into one list
+    # while keeping track of the assigned classes
+    combined_list = []
+    sub_class_list = []
+    for i, key in enumerate(class_data.keys()):
+        if i == (num_classes - 1):
+            num_per_class = num_samples
+        else:
+            num_per_class = int(round(num_samples / (num_classes - i)))
+            num_samples -= num_per_class
+        random_perm = np.random.permutation(class_data[key])
+        for j in range(num_per_class):
+            combined_list.append(data[random_perm[j]])
+            sub_class_list.append(class_list[random_perm[j]])
+
+    # shuffle the combined list so that the returned list is NOT sorted by class
+    final_perm = np.random.permutation(len(combined_list))
+    combined_final = []
+    class_final = []
+    for i in range(len(final_perm)):
+        combined_final.append(combined_list[final_perm[i]])
+        class_final.append(sub_class_list[final_perm[i]])
+    return combined_final, class_final
+
+
+def get_final_imbalanced_list(data, class_data, class_list, proportions):
+    # take samples equal to proportions from each class and combine into one list
+    # while keeping track of the assigned classes
+    combined_list = []
+    sub_class_list = []
+    for key in class_data.keys():
+        random_perm = np.random.permutation(class_data[key])
+        for i in range(proportions[key]):
+            combined_list.append(data[random_perm[i]])
+            sub_class_list.append(class_list[random_perm[i]])
+
+    # shuffle the combined list so that the returned list is NOT sorted by class
+    final_perm = np.random.permutation(len(combined_list))
+    combined_final = [combined_list[final_perm[i]] for i in range(len(final_perm))]
+    class_final = [sub_class_list[final_perm[i]] for i in range(len(final_perm))]
+
+    return combined_final, class_final
 
 
 def random_subsample(data, size=0.25, axis=0):
@@ -24,6 +70,37 @@ def random_subsample(data, size=0.25, axis=0):
     random_perm = np.random.permutation(data_size)
     ret_list = [data[random_perm[i]] for i in range(num_samples)]
     return ret_list
+
+
+def weighted_subsample(data, num_samples, probs, labels, k):
+    """
+    used for multiclass_prob()
+    :param data:
+    :param num_samples:
+    :param probs:
+    :return:
+    """
+    # workaround for 1-D restriction of numpy.random.choice
+    class Temp:
+        def __init__(self, val):
+            self.val = val
+
+    subsample = []
+    for i in range(k):
+        cluster = []
+        prob_list = []
+        for j in range(len(data)):
+            if labels[j] == i:
+                cluster.append(data[j])
+                prob_list.append(probs[j])
+        # convert list of lists to list of objects for numpy.random.choice
+        cluster = [Temp(cluster[i]) for i in range(len(cluster))]
+        num = num_samples - len(subsample) if i == k - 1 else round(num_samples / k)
+        subsample += list(np.random.choice(a=cluster, size=num, replace=False, p=normalize(prob_list)))
+
+    # convert back to list of lists
+    subsample = [i.val for i in subsample]
+    return subsample
 
 
 def stratified_subsample(data, class_list, size, balanced=True):
@@ -76,29 +153,9 @@ def stratified_subsample_balanced(data, class_list, size):
         else:
             class_data[class_list[i]].append(i)
 
-    # take equal proportions from each class and combine into one list
-    # while keeping track of the assigned classes
-    combined_list = []
-    sub_class_list = []
-    for i, key in enumerate(class_data.keys()):
-        if i == (num_classes - 1):
-            num_per_class = num_samples
-        else:
-            num_per_class = int(round(num_samples / (num_classes-i)))
-            num_samples -= num_per_class
-        random_perm = np.random.permutation(class_data[key])
-        for j in range(num_per_class):
-            combined_list.append(data[random_perm[j]])
-            sub_class_list.append(class_list[random_perm[j]])
+    return get_final_balanced_list(data, class_data, class_list, num_samples, num_classes)
 
-    # shuffle the combined list so that the returned list is NOT sorted by class
-    final_perm = np.random.permutation(len(combined_list))
-    combined_final = []
-    class_final = []
-    for i in range(len(final_perm)):
-        combined_final.append(combined_list[final_perm[i]])
-        class_final.append(sub_class_list[final_perm[i]])
-    return combined_final, class_final
+
 
 
 def stratified_subsample_imbalanced(data, class_list, size, exact=True):
@@ -115,8 +172,6 @@ def stratified_subsample_imbalanced(data, class_list, size, exact=True):
 
 
 def stratified_subsample_imbalanced_prob(data, class_list, size):
-    num_classes = len(np.unique(class_list))
-
     data_size = get_data_size(data)
 
     if data_size != len(class_list):
@@ -149,22 +204,7 @@ def stratified_subsample_imbalanced_prob(data, class_list, size):
         else:
             class_data[class_list[i]].append(i)
 
-    # take samples equal to proportions from each class and combine into one list
-    # while keeping track of the assigned classes
-    combined_list = []
-    sub_class_list = []
-    for key in class_data.keys():
-        random_perm = np.random.permutation(class_data[key])
-        for i in range(proportions[key]):
-            combined_list.append(data[random_perm[i]])
-            sub_class_list.append(class_list[random_perm[i]])
-
-    # shuffle the combined list so that the returned list is NOT sorted by class
-    final_perm = np.random.permutation(len(combined_list))
-    combined_final = [combined_list[final_perm[i]] for i in range(len(final_perm))]
-    class_final = [sub_class_list[final_perm[i]] for i in range(len(final_perm))]
-
-    return combined_final, class_final
+    return get_final_imbalanced_list(data, class_data, class_list, proportions)
 
 
 def stratified_subsample_imbalanced_exact(data, class_list, size):
@@ -181,7 +221,6 @@ def stratified_subsample_imbalanced_exact(data, class_list, size):
                 class in the given data set matching class_list to indicate classes of the sub-samples.
     """
     num_classes = len(np.unique(class_list))
-
     data_size = get_data_size(data)
 
     if data_size != len(class_list):
@@ -225,19 +264,4 @@ def stratified_subsample_imbalanced_exact(data, class_list, size):
         else:
             class_data[class_list[i]].append(i)
 
-    # take samples equal to proportions from each class and combine into one list
-    # while keeping track of the assigned classes
-    combined_list = []
-    sub_class_list = []
-    for key in class_data.keys():
-        random_perm = np.random.permutation(class_data[key])
-        for i in range(proportions[key]):
-            combined_list.append(data[random_perm[i]])
-            sub_class_list.append(class_list[random_perm[i]])
-
-    # shuffle the combined list so that the returned list is NOT sorted by class
-    final_perm = np.random.permutation(len(combined_list))
-    combined_final = [combined_list[final_perm[i]] for i in range(len(final_perm))]
-    class_final = [sub_class_list[final_perm[i]] for i in range(len(final_perm))]
-
-    return combined_final, class_final
+    return get_final_imbalanced_list(data, class_data, class_list, proportions)
