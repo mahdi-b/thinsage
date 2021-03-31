@@ -1,6 +1,5 @@
 import pandas as pd
 from sklearn.cluster import KMeans
-import numpy as np
 from helper_functions import get_num_samples
 from helper_functions import cluster_dist
 from helper_functions import infer_k
@@ -11,6 +10,12 @@ from thinsage_subsample import weighted_subsample
 
 
 def distances_to_probabilities(distances):
+    """
+    used in clustering, converts list of distances to inversely proportional probabilities.
+    closer the point to the center, greater the probability.
+    :param distances: array-like
+    :return: list of probabilities corresponding to each distance.
+    """
     # convert to probabilities
     max_dist = max(distances)
     min_dist = min(distances)
@@ -20,6 +25,20 @@ def distances_to_probabilities(distances):
 
 # pure implementation no regard for distance
 def multiclass_subsample(data, size, k=None, inflate_k=0):
+    """
+    takes sample based on inferred grouping.
+    clusters points, then takes random samples from each cluster.
+    :param data: list/collection of type Object. Contains the samples to be sub-sampled from.
+    :param size: Integer to determine how many samples desired, or float between 0 and 1 to represent
+                 percentage of samples to be taken.
+    :param k: number of clusters that best fit the data if known.
+                if unknown/undefined, k will be inferred.
+    :param inflate_k: optional integer. if k is undefined k will be inferred,
+                        then inflate_k will be added to the inferred k value.
+    :return: tuple: subsample: containing subsampled y values and
+                    sub_labels: corresponding x-labels containing either x_labels subsampled or integers corresponding to
+                    the sampled y values
+    """
     # convert to list
     if isinstance(data, pd.DataFrame):
         data = data.values.tolist()
@@ -42,11 +61,19 @@ def multiclass_subsample(data, size, k=None, inflate_k=0):
 # take distance into account
 def multiclass_subsample_prob(data, size, k=None, inflate_k=0):
     """
-    TO-DO: check for duplicates
-    :param data:
-    :param size:
-    :param k:
-    :return:
+    takes sample based on inferred grouping.
+    clusters points, then takes probabilistic samples
+    from each cluster based on distance to cluster center.
+    :param data: list/collection of type Object. Contains the samples to be sub-sampled from.
+    :param size: Integer to determine how many samples desired, or float between 0 and 1 to represent
+                 percentage of samples to be taken.
+    :param k: number of clusters that best fit the data if known.
+                if unknown/undefined, k will be inferred.
+    :param inflate_k: optional integer. if k is undefined k will be inferred,
+                        then inflate_k will be added to the inferred k value.
+    :return: tuple: subsample: containing subsampled y values and
+                    sub_labels: corresponding x-labels containing either x_labels subsampled or integers corresponding to
+                    the sampled y values
     """
     # convert to list
     if isinstance(data, pd.DataFrame):

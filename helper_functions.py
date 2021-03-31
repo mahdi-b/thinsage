@@ -23,6 +23,11 @@ def get_num_samples(size, data_size):
 
 
 def get_data_size(data):
+    """
+    helper function to check data parameter and return length/size of data
+    :param data: data set given by the user
+    :return: integer representing length or shape[0] of data
+    """
     if isinstance(data, list):
         data_size = len(data)
     else:
@@ -33,29 +38,51 @@ def get_data_size(data):
 
 
 def avg(_list):
-    return sum(_list) / len(_list)
+    """
+    takes avg of list of values
+    :param _list: given list
+    :return: float avg
+    """
+    return float(sum(_list) / len(_list))
 
 
 def normalize(_list):
+    """
+    normalize a list of numbers
+    :param _list: list of numbers
+    :return: list normalized
+    """
     _sum = sum(_list)
     return[i/_sum for i in _list]
 
 
 def cluster_dist(point, cluster_center):
+    """
+    given two points returns Euclidean distance between the points
+    :param point: point in n-dimensional space
+    :param cluster_center: point in n-dimensional space
+    :return: float distance between the two
+    """
     sum_ = sum([(point[i] - cluster_center[i]) ** 2 for i in range(len(point))])
     return sum_ ** .5
 
-# just filler function
-def infer_k(data):
-    # A list holds the silhouette coefficients for each k
-    silhouette_coefficients = []
 
+def infer_k(data):
+    """
+    iterates from 2-10 testing how many clusters best fit the given data
+    (uses silhouette index to guage)
+    :param data: given data
+    :return: best fit k
+    """
     kmeans_kwargs = {
         "init": "random",
         "n_init": 10,
         "max_iter": 300,
         "random_state": 42,
     }
+
+    # A list holds the silhouette coefficients for each k
+    silhouette_coefficients = []
 
     # Notice you start at 2 clusters for silhouette coefficient
     for k in range(2, 11):
