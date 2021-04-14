@@ -6,8 +6,18 @@ from helper_functions import normalize
 
 
 def get_final_balanced_list(data, class_data, class_list, num_samples, num_classes):
-    # take equal proportions from each class and combine into one list
-    # while keeping track of the assigned classes
+    """
+    helper function specifically for stratified subsample, (should not be callable by user)</br>
+    take equal proportions from each class and combine into one list</br>
+    while keeping track of the assigned classes</br>
+    :param data: list of points representing data</br>
+    :param class_data: data dictionary with key: class value: data val</br>
+    :param class_list: corresponding class_label for data</br>
+    :param num_samples: number of samples to take</br>
+    :param num_classes: number of distinct class labels</br>
+    :return: combined_final, class_final: tuple of lists representing
+                data, and labels respectively
+    """
     combined_list = []
     sub_class_list = []
     for i, key in enumerate(class_data.keys()):
@@ -74,10 +84,11 @@ def random_subsample(data, size=0.25, axis=0):
 
 def weighted_subsample(data, num_samples, probs, labels, k):
     """
-    used for multiclass_prob()
     :param data:
     :param num_samples:
     :param probs:
+    :param labels:
+    :param k:
     :return:
     """
     # workaround for 1-D restriction of numpy.random.choice
@@ -160,18 +171,42 @@ def stratified_subsample_balanced(data, class_list, size):
 
 def stratified_subsample_imbalanced(data, class_list, size, exact=True):
     """
-    TO-DO: add docstring
-    :param data:
-    :param class_list:
-    :param size:
-    :param exact:
-    :return:
+    TO-DO: check for numpy array data type</br>
+    user ease function to decide between stratified_subsample_imbalanced_exact() and
+    stratified_subsample_imbalanced_prob().
+    imbalanced means an equal *proportion* from each class will be</br>
+      sampled based on original ratios.
+    data will be list/collection of type Object where each item belongs to a class as specified by class_list,</br>
+    data[i] will belong to class class_list[i].</br>
+    np.unique(class_list) should indicate number of different classes.</br>
+    :param data: list/collection of type Object. Contains the samples to be sub-sampled from.</br>
+    :param class_list: list of class identifiers, classList[i] = x implies data[i] belongs to class x</br>
+                       where x can be of type int, string, or object</br>
+    :param size: Integer to determine how many samples desired, or float between 0 and 1 to represent</br>
+                 percentage of samples to be taken.</br>
+    :return: randomized list containing balanced number samples from each class in the given data set</br>
+             matching class_list to indicate classes of the sub-samples.</br>
     """
     return stratified_subsample_imbalanced_exact(data=data, class_list=class_list, size=size) if exact\
         else stratified_subsample_imbalanced_prob(data, class_list, size)
 
 
 def stratified_subsample_imbalanced_prob(data, class_list, size):
+    """
+    TO-DO: check for numpy array data type</br>
+    takes subsample based on class labels. imbalanced means an equal *proportion* from each class will be</br>
+      sampled based on original ratios.
+    data will be list/collection of type Object where each item belongs to a class as specified by class_list,</br>
+    data[i] will belong to class class_list[i].</br>
+    np.unique(class_list) should indicate number of different classes.</br>
+    :param data: list/collection of type Object. Contains the samples to be sub-sampled from.</br>
+    :param class_list: list of class identifiers, classList[i] = x implies data[i] belongs to class x</br>
+                       where x can be of type int, string, or object</br>
+    :param size: Integer to determine how many samples desired, or float between 0 and 1 to represent</br>
+                 percentage of samples to be taken.</br>
+    :return: randomized list containing balanced number samples from each class in the given data set</br>
+             matching class_list to indicate classes of the sub-samples.</br>
+    """
     data_size = get_data_size(data)
 
     if data_size != len(class_list):

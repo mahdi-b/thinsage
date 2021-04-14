@@ -180,7 +180,7 @@ def timeseries_sliding_window(data, w_size, f=avg, delta=.1, x_labels=None):
     return ret_list, ret_labels
 
 
-def timeseries_LTTB(data, threshold):
+def timeseries_LTTB(data, size, threshold):
     """
     Return a downsampled version of data.
     Parameters
